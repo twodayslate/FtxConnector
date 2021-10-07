@@ -3,9 +3,17 @@ import CryptoKit
 
 public enum FtxEndpoint: String {
     case account = "/api/account"
-    
-    public func signature(ts: Int, secret: String) -> String? {
-        guard let payload = "\(ts)GET\(self.rawValue)".data(using: .utf8) else {
+    case subaccounts = "/api/subaccounts"
+    case positions = "/api/positions"
+
+    public func signature(ts: Int, secret: String, queryItems: [URLQueryItem]?=nil) -> String? {
+        var queryString = ""
+        if let queryItems = queryItems {
+            var c = URLComponents()
+            c.queryItems = queryItems
+            queryString = c.url?.absoluteString ?? ""
+        }
+        guard let payload = "\(ts)GET\(self.rawValue)\(queryString)".data(using: .utf8) else {
             return nil
         }
         guard let secretData = secret.data(using: .utf8) else {

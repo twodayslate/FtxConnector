@@ -1,6 +1,6 @@
 import Foundation
 
-public struct FtxPosition: Codable {
+public struct FtxPosition: Codable, Equatable {
     /// Amount that was paid to enter this position, equal to size * entry_price. Positive if long, negative if short.
     public let cost: Double
     public let cumulativeBuySize: Double?

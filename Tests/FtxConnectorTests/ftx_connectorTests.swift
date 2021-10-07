@@ -2,13 +2,28 @@ import XCTest
 @testable import FtxConnector
 
 final class ftx_connectorTests: XCTestCase {
-    func testExample() async throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        //XCTAssertEqual(ftx_connector().text, "Hello, World!")
-        let client = FtxConnector.restClient(key: ProcessInfo.processInfo.environment["FTX_KEY"]!, secret: ProcessInfo.processInfo.environment["FTX_SECRET"]!)
+    var client: FtxRestApiClient!
+    
+    override func setUp() {
+        super.setUp()
+        self.client = FtxConnector.restClient(key: ProcessInfo.processInfo.environment["FTX_KEY"]!, secret: ProcessInfo.processInfo.environment["FTX_SECRET"]!)
+    }
+    
+    func testAccount() async throws {
         let account = try await client.account()
         XCTAssertNotNil(account)
+    }
+    
+    func testPositions() async throws {
+        let positions_avg_price = try await client.positions(showAvgPrice: true)
+        XCTAssertNotNil(positions_avg_price)
+        
+        let positions = try await client.positions(showAvgPrice: false)
+        XCTAssertNotNil(positions)
+    }
+    
+    func testSubaccounts() async throws {
+        let subaccounts = try await self.client.subaccounts()
+        XCTAssertNotNil(subaccounts)
     }
 }
