@@ -1,5 +1,8 @@
 import Foundation
 
+/**
+ * - SeeAlso: https://docs.ftx.com/#get-positions
+ */
 public struct FtxPosition: Codable, Equatable {
     /// Amount that was paid to enter this position, equal to size * entry_price. Positive if long, negative if short.
     public let cost: Double

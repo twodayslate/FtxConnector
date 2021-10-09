@@ -1,5 +1,8 @@
 import Foundation
 
+/**
+ * - SeeAlso: https://docs.ftx.com/#subaccounts
+ */
 public struct FtxSubaccount: Codable, Equatable {
     /// subaccount name
     public let nickname: String

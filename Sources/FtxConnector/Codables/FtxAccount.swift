@@ -1,6 +1,10 @@
 import Foundation
 
-/// https://docs.ftx.com/?csharp#get-account-information
+/**
+ * Account Information
+ * 
+ * - SeeAlso: https://docs.ftx.com/#account
+ */
 public struct FtxAccount: Codable, Equatable {
     /// whether or not the account is a registered backstop liquidity provider
     public let backstopProvider: Bool

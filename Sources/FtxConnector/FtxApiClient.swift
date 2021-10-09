@@ -34,14 +34,25 @@ public struct FtxRestApiClient {
         return request
     }
     
+    internal func check(response: URLResponse) throws {
+        // You are being rate limited
+        // https://help.ftx.com/hc/en-us/articles/360052595091-2020-11-20-Ratelimit-Updates
+        if (response as? HTTPURLResponse)?.statusCode == 429 {
+            throw URLError(.rateLimited)
+        }
+        
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+    }
+    
     public func account(subaccount: FtxSubaccount? = nil) async throws -> FtxResponse<FtxAccount> {
         let request = try self.setupRequest(endpoint: .account, subaccount: subaccount)
         
         let (data, response) = try await self.session.data(for: request)
 
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
+        try self.check(response: response)
+
         return try JSONDecoder().decode(FtxResponse<FtxAccount>.self, from: data)
     }
     
@@ -50,9 +61,8 @@ public struct FtxRestApiClient {
 
         let (data, response) = try await self.session.data(for: request)
 
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
+        try self.check(response: response)
+
         return try JSONDecoder().decode(FtxResponse<[FtxPosition]>.self, from: data)
     }
     
@@ -61,9 +71,8 @@ public struct FtxRestApiClient {
 
         let (data, response) = try await self.session.data(for: request)
 
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw URLError(.badServerResponse)
-        }
+        try self.check(response: response)
+
         return try JSONDecoder().decode(FtxResponse<[FtxSubaccount]>.self, from: data)
     }
 }

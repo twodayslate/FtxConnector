@@ -1,7 +1,7 @@
 import XCTest
 @testable import FtxConnector
 
-final class ftx_connectorTests: XCTestCase {
+final class RestApiTests: XCTestCase {
     var client: FtxRestApiClient!
     
     override func setUp() {
